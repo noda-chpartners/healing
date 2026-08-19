@@ -1,0 +1,406 @@
+---
+import { siteContent } from '../data/siteContent';
+---
+
+<header class="site-header" data-header>
+  <div class="site-header__inner">
+    <a class="site-header__logo link-reset" href="#top" aria-label="Healing トップへ">
+      <span class="site-header__logo-main">Healing</span>
+      <span class="site-header__logo-sub">SHONAN</span>
+    </a>
+
+    <nav class="site-header__nav" aria-label="メインナビゲーション">
+      {siteContent.nav.map((item) => (
+        <a class="site-header__nav-link link-reset" href={item.href}>
+          <span class="site-header__nav-en">{item.en}</span>
+          <span class="site-header__nav-ja">{item.label}</span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="site-header__cast link-reset" href={siteContent.castUrl} target="_blank" rel="noopener noreferrer">
+        在籍一覧
+      </a>
+      <a class="site-header__phone link-reset" href={`tel:${siteContent.telephone}`}>
+        <span class="site-header__phone-label">CALL</span>
+        <span class="site-header__phone-number">{siteContent.telephoneDisplay}</span>
+      </a>
+    </div>
+
+    <button class="site-header__menu-button button-reset" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-button>
+      <span class="site-header__menu-label">MENU</span>
+      <span class="site-header__menu-lines" aria-hidden="true">
+        <span class="site-header__menu-line"></span>
+        <span class="site-header__menu-line"></span>
+      </span>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" data-mobile-menu>
+    <div class="mobile-menu__inner">
+      <p class="mobile-menu__eyebrow">HEALING / SHONAN</p>
+      <nav class="mobile-menu__nav" aria-label="モバイルナビゲーション">
+        {siteContent.nav.map((item, index) => (
+          <a class="mobile-menu__link link-reset" href={item.href} data-menu-link>
+            <span class="mobile-menu__number">0{index + 1}</span>
+            <span class="mobile-menu__label">{item.label}</span>
+            <span class="mobile-menu__en">{item.en}</span>
+          </a>
+        ))}
+        <a class="mobile-menu__link link-reset" href={siteContent.castUrl} target="_blank" rel="noopener noreferrer" data-menu-link>
+          <span class="mobile-menu__number">05</span>
+          <span class="mobile-menu__label">在籍一覧</span>
+          <span class="mobile-menu__en">CAST LIST</span>
+        </a>
+      </nav>
+      <div class="mobile-menu__contact">
+        <a class="mobile-menu__contact-link link-reset" href={`tel:${siteContent.telephone}`}>
+          <span class="mobile-menu__contact-label">PHONE</span>
+          <span class="mobile-menu__contact-value">{siteContent.telephoneDisplay}</span>
+        </a>
+        <a class="mobile-menu__contact-link link-reset" href={siteContent.lineUrl} target="_blank" rel="noopener noreferrer">
+          <span class="mobile-menu__contact-label">OFFICIAL LINE</span>
+          <span class="mobile-menu__contact-value">LINEで予約する</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const links = document.querySelectorAll<HTMLElement>('[data-menu-link]');
+
+  const setMenuState = (isOpen: boolean) => {
+    button?.setAttribute('aria-expanded', String(isOpen));
+    menu?.setAttribute('aria-hidden', String(!isOpen));
+    header?.classList.toggle('site-header--menu-open', isOpen);
+    document.documentElement.classList.toggle('menu-open', isOpen);
+  };
+
+  button?.addEventListener('click', () => setMenuState(button.getAttribute('aria-expanded') !== 'true'));
+  links.forEach((link) => link.addEventListener('click', () => setMenuState(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setMenuState(false);
+  });
+
+  const updateHeader = () => header?.classList.toggle('site-header--scrolled', window.scrollY > 24);
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
+</script>
+
+<style lang="scss">
+  .site-header {
+    position: fixed;
+    z-index: 100;
+    inset: 0 0 auto;
+    height: var(--header-height);
+    color: var(--color-ink);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+    &--scrolled {
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 8px 30px rgba(72, 61, 43, 0.08);
+      backdrop-filter: blur(18px);
+    }
+
+    &__inner {
+      position: relative;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      width: min(calc(100% - 64px), 1480px);
+      height: 100%;
+      margin-inline: auto;
+    }
+
+    &__logo {
+      display: grid;
+      gap: 0.05rem;
+    }
+
+    &__logo-main {
+      color: var(--color-gold-dark);
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 2.7vw, 2.8rem);
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: -0.07em;
+      line-height: 0.85;
+    }
+
+    &__logo-sub {
+      padding-left: 0.3rem;
+      font-size: 0.48rem;
+      font-weight: 700;
+      letter-spacing: 0.34em;
+    }
+
+    &__nav {
+      display: flex;
+      justify-content: center;
+      gap: clamp(1.2rem, 2.4vw, 2.8rem);
+    }
+
+    &__nav-link {
+      position: relative;
+      display: grid;
+      gap: 0.05rem;
+      text-align: center;
+
+      &::after {
+        position: absolute;
+        right: 0;
+        bottom: -0.5rem;
+        left: 0;
+        height: 2px;
+        border-radius: 99px;
+        background: var(--color-gold);
+        content: '';
+        transform: scaleX(0);
+        transition: transform 0.25s ease;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        transform: scaleX(1);
+      }
+    }
+
+    &__nav-en {
+      color: var(--color-gold-dark);
+      font-family: var(--font-display);
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    &__nav-ja {
+      font-size: 0.64rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    &__cast {
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--color-gold);
+      border-radius: 999px;
+      color: var(--color-gold-dark);
+      font-size: 0.68rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    &__phone {
+      display: grid;
+      gap: 0.05rem;
+      padding-left: 1rem;
+      border-left: 1px solid var(--color-line);
+    }
+
+    &__phone-label {
+      color: var(--color-gold-dark);
+      font-family: var(--font-display);
+      font-size: 0.5rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+    }
+
+    &__phone-number {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    &__menu-button {
+      display: none;
+    }
+  }
+
+  .mobile-menu {
+    position: fixed;
+    z-index: 2;
+    inset: 0;
+    width: 100%;
+    height: 100svh;
+    overflow-x: clip;
+    overflow-y: auto;
+    color: var(--color-ink);
+    background: #f5f0e7;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-1rem);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+
+    &__inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: center;
+      gap: clamp(1rem, 3svh, 2.4rem);
+      width: min(calc(100% - 40px), 560px);
+      min-height: 100%;
+      margin-inline: auto;
+      padding-block: calc(var(--header-height) + 1rem) 2rem;
+    }
+
+    &__eyebrow {
+      margin: 0;
+      color: var(--color-gold-dark);
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+    }
+
+    &__nav {
+      display: grid;
+    }
+
+    &__link {
+      display: grid;
+      grid-template-columns: 2rem 1fr auto;
+      align-items: baseline;
+      min-width: 0;
+      padding-block: clamp(0.65rem, 1.8svh, 1.15rem);
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    &__number,
+    &__en,
+    &__contact-label {
+      color: var(--color-gold-dark);
+      font-family: var(--font-display);
+      font-size: 0.54rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+    }
+
+    &__label {
+      min-width: 0;
+      font-size: clamp(1.25rem, 6.5vw, 1.9rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+
+    &__en {
+      text-align: right;
+    }
+
+    &__contact {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    &__contact-link {
+      display: grid;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    &__contact-value {
+      font-size: clamp(0.72rem, 3vw, 0.9rem);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+  }
+
+  .site-header--menu-open {
+    color: var(--color-ink);
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+
+    .site-header__menu-line:first-child {
+      transform: translateY(3px) rotate(45deg);
+    }
+
+    .site-header__menu-line:last-child {
+      transform: translateY(-3px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+
+  :global(.site-root.menu-open) {
+    overflow: hidden;
+  }
+
+  @media (max-width: 1120px) {
+    .site-header {
+      &__inner {
+        grid-template-columns: auto 1fr auto;
+        width: calc(100% - 40px);
+      }
+
+      &__nav,
+      &__actions {
+        display: none;
+      }
+
+      &__menu-button {
+        display: flex;
+        grid-column: 3;
+        align-items: center;
+        gap: 0.7rem;
+        cursor: pointer;
+      }
+
+      &__menu-label {
+        font-family: var(--font-display);
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+      }
+
+      &__menu-lines {
+        display: grid;
+        gap: 5px;
+        width: 28px;
+      }
+
+      &__menu-line {
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: currentColor;
+        transition: transform 0.25s ease;
+      }
+    }
+  }
+
+  @media (max-width: 370px), (max-height: 640px) {
+    .mobile-menu {
+      &__inner {
+        align-content: start;
+        gap: 0.85rem;
+      }
+
+      &__link {
+        padding-block: 0.55rem;
+      }
+
+      &__label {
+        font-size: 1.15rem;
+      }
+    }
+  }
+</style>

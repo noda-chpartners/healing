@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://healing-shonan.com/sitemap-index.xml

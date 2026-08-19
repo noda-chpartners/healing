@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import backgroundImage from '../assets/images/healing-background.png';
+---
+
+<div class="fixed-background" aria-hidden="true">
+  <Image
+    class="fixed-background__image"
+    src={backgroundImage}
+    alt=""
+    widths={[960, 1440, 1920]}
+    sizes="100vw"
+    format="webp"
+    quality={82}
+    loading="eager"
+  />
+  <div class="fixed-background__wash"></div>
+</div>
+
+<style lang="scss">
+  .fixed-background {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+    background: #f5f0e7;
+    pointer-events: none;
+
+    &__image,
+    &__wash {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    &__image {
+      object-fit: cover;
+      opacity: 1;
+    }
+
+    &__wash {
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(240, 234, 220, 0.04)),
+        rgba(255, 255, 255, 0.02);
+    }
+  }
+</style>

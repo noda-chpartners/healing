@@ -1,0 +1,68 @@
+---
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/400-italic.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/shippori-mincho/400.css';
+import '@fontsource/shippori-mincho/500.css';
+import '@fontsource/shippori-mincho/600.css';
+import '@fontsource/zen-kaku-gothic-new/400.css';
+import '@fontsource/zen-kaku-gothic-new/500.css';
+import '@fontsource/zen-kaku-gothic-new/700.css';
+import '../styles/global.css';
+import { siteContent } from '../data/siteContent';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/ogp.jpg', Astro.site);
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: siteContent.name,
+  url: siteContent.officialUrl,
+  image: ogImage.href,
+  telephone: `+81-${siteContent.telephone.slice(1, 4)}-${siteContent.telephone.slice(4, 8)}-${siteContent.telephone.slice(8)}`,
+  address: {
+    '@type': 'PostalAddress',
+    postalCode: siteContent.postalCode,
+    addressRegion: '神奈川県',
+    addressLocality: '藤沢市',
+    streetAddress: '藤沢５１６−９',
+    addressCountry: 'JP',
+  },
+  openingHours: 'Mo-Su 12:00-27:00',
+  sameAs: [siteContent.lineUrl],
+};
+---
+
+<!doctype html>
+<html class="site-root" lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="robots" content="index, follow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:site_name" content={siteContent.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body class="page">
+    <slot />
+  </body>
+</html>

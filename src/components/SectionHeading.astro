@@ -1,0 +1,14 @@
+---
+interface Props {
+  en: string;
+  ja: string;
+  id?: string;
+}
+
+const { en, ja, id } = Astro.props;
+---
+
+<h2 class="section-heading reveal-item" id={id}>
+  <span class="section-heading__en">{en}</span>
+  <span class="section-heading__ja">{ja}</span>
+</h2>

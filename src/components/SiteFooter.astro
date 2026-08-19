@@ -1,0 +1,114 @@
+---
+import { siteContent } from '../data/siteContent';
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner container">
+    <div class="site-footer__brand">
+      <p class="site-footer__logo">Healing</p>
+      <p class="site-footer__tagline">SHONAN / FUJISAWA</p>
+    </div>
+
+    <div class="site-footer__meta">
+      <p class="site-footer__notice">18歳未満の方はご利用いただけません。</p>
+      <p class="site-footer__copyright">© {new Date().getFullYear()} {siteContent.name}</p>
+    </div>
+
+    <a class="site-footer__top link-reset" href="#top">
+      <span class="site-footer__top-label">PAGE TOP</span>
+      <span class="site-footer__top-arrow" aria-hidden="true">↑</span>
+    </a>
+  </div>
+</footer>
+
+<style lang="scss">
+  .site-footer {
+    position: relative;
+    z-index: 1;
+    padding-block: clamp(3rem, 6vw, 5rem);
+    color: var(--color-ink);
+    background: rgba(255, 255, 255, 0.82);
+
+    &__inner {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    &__brand {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    &__logo,
+    &__tagline,
+    &__notice,
+    &__copyright {
+      margin: 0;
+    }
+
+    &__logo {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 4rem);
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: -0.06em;
+    }
+
+    &__tagline,
+    &__notice,
+    &__copyright,
+    &__top-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.16em;
+    }
+
+    &__tagline {
+      color: var(--color-gold-dark);
+      font-weight: 700;
+    }
+
+    &__meta {
+      display: grid;
+      gap: 0.5rem;
+      color: var(--color-ink-soft);
+      text-align: right;
+    }
+
+    &__top {
+      display: grid;
+      justify-items: center;
+      gap: 0.7rem;
+      padding-left: 2rem;
+      border-left: 1px solid var(--color-line);
+    }
+
+    &__top-label {
+      writing-mode: vertical-rl;
+    }
+
+    &__top-arrow {
+      color: var(--color-gold-dark);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .site-footer {
+      &__inner {
+        grid-template-columns: 1fr auto;
+        gap: 2rem 1rem;
+      }
+
+      &__meta {
+        grid-row: 2;
+        text-align: left;
+      }
+
+      &__top {
+        grid-row: 1 / 3;
+        grid-column: 2;
+      }
+    }
+  }
+</style>
