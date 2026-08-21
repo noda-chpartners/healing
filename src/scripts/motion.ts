@@ -18,17 +18,18 @@ if (!reducedMotion) {
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  gsap.from('.reveal-hero', {
-    y: 36,
-    opacity: 0,
-    duration: 1.1,
-    stagger: 0.13,
-    ease: 'power3.out',
-    delay: 0.15,
-  });
+  gsap.fromTo(
+    '[data-hero-media]',
+    { scale: 1.025 },
+    {
+      scale: 1,
+      duration: 1.6,
+      ease: 'power2.out',
+    },
+  );
 
-  gsap.to('.hero__outline', {
-    xPercent: 5,
+  gsap.to('[data-hero-media]', {
+    yPercent: 4,
     ease: 'none',
     scrollTrigger: {
       trigger: '#top',
